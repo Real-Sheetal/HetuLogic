@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HetuLogic — Ancient Indian Logic &amp; Modern AI</title>
+  <meta name="description" content="Explore how ancient Indian Nyaya-Vaisheshika logic connects to modern Symbolic AI through an interactive split-screen solver, reference guide, and quiz game.">
+
+  <!-- Google Fonts: Cinzel, Lora, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- STICKY TOP NAVIGATION BAR -->
+  <header class="top-nav-bar" id="navbar">
+    <div class="nav-container">
+      <!-- Brand Logo (Left) -->
+      <a href="#top-masthead" class="brand-link" id="brand-home-link">
+        <div class="brand-symbol" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="34" height="34" class="brand-svg">
+            <circle cx="20" cy="20" r="17" fill="none" stroke="#B8860B" stroke-width="1.5"/>
+            <polygon points="20,6 33,29 7,29" fill="none" stroke="#9E3B24" stroke-width="1.6"/>
+            <polygon points="20,34 7,11 33,11" fill="none" stroke="#B8860B" stroke-width="1.3" opacity="0.8"/>
+            <circle cx="20" cy="20" r="3.5" fill="#9E3B24"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">HetuLogic</span>
+          <span class="brand-tagline">Nyaya Logic &amp; Modern AI</span>
+        </div>
+      </a>
+
+      <!-- Dedicated Mode Switcher (Center) -->
+      <nav class="mode-switcher" role="tablist" aria-label="Application Views">
+        <button
+          type="button"
+          class="mode-btn active"
+          id="switch-sim-btn"
+          data-view="simulation"
+          role="tab"
+          aria-selected="true"
+          aria-controls="view-simulation"
+        >
+          <span class="mode-icon" aria-hidden="true">⚖️</span>
+          <span>Simulation Mode</span>
+        </button>
+        <button
+          type="button"
+          class="mode-btn"
+          id="switch-quiz-btn"
+          data-view="quiz"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-quiz"
+        >
+          <span class="mode-icon" aria-hidden="true">📜</span>
+          <span>Quiz Game Mode</span>
+        </button>
+      </nav>
+
+      <!-- Utility Actions (Right) -->
+      <div class="nav-actions">
+        <button
+          type="button"
+          id="sound-toggle-btn"
+          class="nav-btn-icon"
+          title="Toggle Sound Effects"
+          aria-label="Toggle Sound"
+          aria-pressed="true"
+        >
+          <span class="sound-icon" id="sound-icon">🔔</span>
+          <span class="sound-label">Audio: ON</span>
+        </button>
+        <button
+          type="button"
+          id="glossary-modal-btn"
+          class="nav-btn-secondary"
+          title="Open Full Terminology Lexicon"
+        >
+          <span>Lexicon</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CENTRAL FRONT-PAGE MASTHEAD -->
+  <section class="masthead-section" id="top-masthead">
+    <div class="masthead-inner">
+      <div class="masthead-ornament">
+        <span class="ornament-line"></span>
+        <span class="ornament-label">Nyaya–Vaisheshika Philosophy &amp; Symbolic Artificial Intelligence</span>
+        <span class="ornament-line"></span>
+      </div>
+      <h1 class="main-page-title">HetuLogic</h1>
+      <p class="main-page-subtitle">
+        Explore how ancient Indian reasoning solves modern problems—step through live logical proofs or test your understanding in Quiz Mode.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="main-content">
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 1: SIMULATION MODE (50% / 50% SPLIT-SCREEN LAPTOP LAYOUT)          -->
+    <!-- ======================================================================= -->
+    <div id="view-simulation" class="app-view active" role="tabpanel" aria-labelledby="switch-sim-btn">
+      <div class="section-container">
+
+        <!-- 50/50 SPLIT-SCREEN WORKSPACE -->
+        <div class="sim-split-layout" id="inference-engine">
+
+          <!-- LEFT PANEL (50%): INTERACTIVE PROBLEM SOLVER -->
+          <section class="manuscript-panel solver-panel" aria-label="Interactive Problem Solver">
+            <div class="panel-header">
+              <div>
+                <span class="panel-kicker">Interactive Problem Solver</span>
+                <h2 class="panel-heading">Nyaya Reasoning &amp; AI Simulator</h2>
+              </div>
+              <div class="status-badge" id="nyaya-status-pill">
+                <span class="status-dot"></span>
+                <span class="status-text">Ready</span>
+              </div>
+            </div>
+
+            <!-- Scenario Input & Presets -->
+            <div class="solver-input-box">
+              <div class="form-group">
+                <label for="custom-proposition-input" class="form-label">
+                  <span>Enter a Problem or Logical Scenario</span>
+                  <span class="form-hint">Example: "The server is hot because the fan stopped"</span>
+                </label>
+                <div class="input-action-row">
+                  <input
+                    type="text"
+                    id="custom-proposition-input"
+                    class="custom-text-input"
+                    value="There is fire on the mountain"
+                    placeholder="Type a scenario (e.g., X because Y)..."
+                  >
+                  <button type="button" id="run-inference-btn" class="primary-btn" title="Run Full Analysis (Spacebar)">
+                    <span class="btn-icon">▶</span>
+                    <span class="btn-text">Solve</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="preset-row">
+                <label for="preset-select" class="preset-select-label">Sample Scenarios:</label>
+                <select id="preset-select" class="custom-select">
+                  <option value="mountain" selected>1. There is fire on the mountain (Classical Nyaya)</option>
+                  <option value="server">2. Server is overheating (Cloud Operations)</option>
+                  <option value="packet_loss">3. Network packet loss detected (Network Diagnostics)</option>
+                  <option value="pneumonia">4. Patient has acute pneumonia (Medical AI)</option>
+                  <option value="autonomous_brake">5. Autonomous vehicle emergency brake (Robotics)</option>
+                  <option value="custom">Custom Scenario (Use Input Above)</option>
+                </select>
+              </div>
+
+              <div class="preset-chips-row">
+                <button type="button" class="preset-chip active" data-preset="mountain">🔥 Mountain Fire</button>
+                <button type="button" class="preset-chip" data-preset="server">🖥️ Server Overheat</button>
+                <button type="button" class="preset-chip" data-preset="packet_loss">📡 Packet Loss</button>
+                <button type="button" class="preset-chip" data-preset="pneumonia">🩺 Medical AI</button>
+                <button type="button" class="preset-chip" data-preset="autonomous_brake">🚗 Auto Brake</button>
+              </div>
+
+              <!-- Step Controls & Speed -->
+              <div class="solver-controls-bar">
+                <div class="btn-group-left">
+                  <button type="button" id="step-prev-btn" class="ghost-btn" title="Previous Step (Left Arrow)">⏮ Prev</button>
+                  <button type="button" id="step-inference-btn" class="secondary-btn" title="Next Step (Right Arrow)">Step Forward ⏭</button>
+                  <button type="button" id="reset-inference-btn" class="ghost-btn">↺ Reset</button>
+                  <button type="button" id="export-report-btn" class="ghost-btn">📄 Export</button>
+                </div>
+                <div class="speed-selector" aria-label="Animation Speed">
+                  <button type="button" class="speed-btn" data-speed="1400">Slow</button>
+                  <button type="button" class="speed-btn active" data-speed="800">Normal</button>
+                  <button type="button" class="speed-btn" data-speed="400">Fast</button>
+                </div>
+              </div>
+
+              <!-- 5-Step Progress Strip -->
+              <div class="stepper-progress-container">
+                <div class="stepper-progress-bar" id="stepper-progress-bar" style="width: 0%;"></div>
+                <div class="stepper-nodes-row">
+                  <button type="button" class="stepper-node" data-step="1" title="Jump to Step 1: Pratijna">
+                    <span class="node-num">1</span>
+                    <span class="node-title">Pratijna</span>
+                  </button>
+                  <button type="button" class="stepper-node" data-step="2" title="Jump to Step 2: Hetu">
+                    <span class="node-num">2</span>
+                    <span class="node-title">Hetu</span>
+                  </button>
+                  <button type="button" class="stepper-node" data-step="3" title="Jump to Step 3: Udaharana">
+                    <span class="node-num">3</span>
+                    <span class="node-title">Udaharana</span>
+                  </button>
+                  <button type="button" class="stepper-node" data-step="4" title="Jump to Step 4: Upanaya">
+                    <span class="node-num">4</span>
+                    <span class="node-title">Upanaya</span>
+                  </button>
+                  <button type="button" class="stepper-node" data-step="5" title="Jump to Step 5: Nigamana">
+                    <span class="node-num">5</span>
+                    <span class="node-title">Nigamana</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTOR 1 & 2: PRATYAKSHA & ANUMANA OVERVIEW -->
+            <div class="sectors-overview-grid">
+              <div class="sector-card interactive-term-source" data-term="pratyaksha" id="sector-pratyaksha" tabindex="0">
+                <div class="sector-header">
+                  <span class="sector-badge">Sector 1 • Observation</span>
+                  <span class="sector-link-hint">Inspect Term →</span>
+                </div>
+                <h3 class="sector-title">Pratyaksha (Direct Perception)</h3>
+                <p class="sector-text" id="sector-pratyaksha-text">
+                  Directly observed evidence: Smoke rising from the mountain ridge (matches AI sensor/camera input).
+                </p>
+              </div>
+
+              <div class="sector-card interactive-term-source" data-term="anumana" id="sector-anumana" tabindex="0">
+                <div class="sector-header">
+                  <span class="sector-badge">Sector 2 • Inference</span>
+                  <span class="sector-link-hint">Inspect Term →</span>
+                </div>
+                <h3 class="sector-title">Anumana (Logical Inference)</h3>
+                <p class="sector-text" id="sector-anumana-text">
+                  Using the universal rule linking smoke to fire to infer what cannot be seen directly (matches AI rule deduction).
+                </p>
+              </div>
+            </div>
+
+            <!-- LIVE EPISTEMIC BRIDGE INDICATOR -->
+            <div class="epistemic-bridge-bar" id="epistemic-bridge-bar" aria-live="polite">
+              <span class="bridge-pill bridge-nyaya" id="bridge-nyaya-label">Nyaya Step: Standby</span>
+              <span class="bridge-connector">⟷</span>
+              <span class="bridge-pill bridge-ai" id="bridge-ai-label">Symbolic AI: Ready to Solve</span>
+            </div>
+
+            <!-- SECTOR 3: THE 5-STEP NYAYA SYLLOGISM + AI EQUIVALENT -->
+            <div class="syllogism-section-header">
+              <h3>5-Step Nyaya Proof &amp; Modern AI Equivalent</h3>
+              <span class="helper-note">Hover or click any step to highlight its definition on the right</span>
+            </div>
+
+            <div class="steps-container" id="nyaya-steps-list">
+
+              <!-- STEP 1: PRATIJNA -->
+              <div class="step-card interactive-term-source" id="nyaya-step-1" data-stage="1" data-term="pratijna" tabindex="0">
+                <div class="step-card-header">
+                  <div class="step-title-group">
+                    <span class="step-num-pill">Step 1</span>
+                    <span class="sanskrit-term">Pratijna (Proposition)</span>
+                  </div>
+                  <span class="step-state-badge">Pending</span>
+                </div>
+                <div class="step-statement" id="nyaya-sutra-1">The mountain has fire.</div>
+                <p class="step-explanation" id="nyaya-desc-1">
+                  This is the starting claim we want to prove true. We name the subject (Paksha: Mountain) and the target property (Sadhya: Fire).
+                </p>
+                <div class="step-tags-row">
+                  <span class="epistemic-tag">Subject (Paksha): <strong id="tag-paksha">Mountain</strong></span>
+                  <span class="epistemic-tag">Target (Sadhya): <strong id="tag-sadhya">Fire</strong></span>
+                </div>
+                <div class="ai-equiv-strip" id="ai-step-1">
+                  <div class="ai-strip-label">Modern AI Equivalent — Target Goal Query</div>
+                  <code class="ai-strip-code" id="ai-code-1">?- query(mountain, has_property(fire)).</code>
+                </div>
+              </div>
+
+              <!-- STEP 2: HETU -->
+              <div class="step-card interactive-term-source" id="nyaya-step-2" data-stage="2" data-term="hetu" tabindex="0">
+                <div class="step-card-header">
+                  <div class="step-title-group">
+                    <span class="step-num-pill">Step 2</span>
+                    <span class="sanskrit-term">Hetu (Reason / Sign)</span>
+                  </div>
+                  <span class="step-state-badge">Pending</span>
+                </div>
+                <div class="step-statement" id="nyaya-sutra-2">Because there is smoke.</div>
+                <p class="step-explanation" id="nyaya-desc-2">
+                  The observable clue or evidence seen directly on the subject. Smoke serves as the logical indicator pointing toward fire.
+                </p>
+                <div class="step-tags-row">
+                  <span class="epistemic-tag">Clue (Hetu): <strong id="tag-hetu">Smoke</strong></span>
+                  <span class="epistemic-tag">Status: <strong id="tag-hetu-status">Directly Observed</strong></span>
+                </div>
+                <div class="ai-equiv-strip" id="ai-step-2">
+                  <div class="ai-strip-label">Modern AI Equivalent — Sensor / Fact Input</div>
+                  <code class="ai-strip-code" id="ai-code-2">WorkingMemory.assertFact("sensor_event", { entity: "mountain", sign: "smoke" });</code>
+                </div>
+              </div>
+
+              <!-- STEP 3: UDAHARANA -->
+              <div class="step-card interactive-term-source" id="nyaya-step-3" data-stage="3" data-term="udaharana" tabindex="0">
+                <div class="step-card-header">
+                  <div class="step-title-group">
+                    <span class="step-num-pill">Step 3</span>
+                    <span class="sanskrit-term">Udaharana (Rule &amp; Example)</span>
+                  </div>
+                  <span class="step-state-badge">Pending</span>
+                </div>
+                <div class="step-statement" id="nyaya-sutra-3">Wherever there is smoke, there is fire — as seen in a kitchen.</div>
+                <p class="step-explanation" id="nyaya-desc-3">
+                  States the universal rule (Vyapti) connecting the clue to the result, backed by a real-world example everyone agrees on.
+                </p>
+                <div class="step-tags-row">
+                  <span class="epistemic-tag">Universal Rule (Vyapti): <strong id="tag-vyapti">Smoke ➔ Fire</strong></span>
+                  <span class="epistemic-tag">Example: <strong id="tag-drishtanta">Kitchen Hearth</strong></span>
+                </div>
+                <div class="ai-equiv-strip" id="ai-step-3">
+                  <div class="ai-strip-label">Modern AI Equivalent — IF-THEN Knowledge Base Rule</div>
+                  <code class="ai-strip-code" id="ai-code-3">RULE_042: IF has_sign(?x, smoke) THEN assert(?x, fire);</code>
+                </div>
+              </div>
+
+              <!-- STEP 4: UPANAYA -->
+              <div class="step-card interactive-term-source" id="nyaya-step-4" data-stage="4" data-term="upanaya" tabindex="0">
+                <div class="step-card-header">
+                  <div class="step-title-group">
+                    <span class="step-num-pill">Step 4</span>
+                    <span class="sanskrit-term">Upanaya (Application)</span>
+                  </div>
+                  <span class="step-state-badge">Pending</span>
+                </div>
+                <div class="step-statement" id="nyaya-sutra-4">This mountain has smoke that always accompanies fire.</div>
+                <p class="step-explanation" id="nyaya-desc-4">
+                  Connects the general rule directly to our specific situation: the observed clue on the mountain matches the universal rule.
+                </p>
+                <div class="step-tags-row">
+                  <span class="epistemic-tag">Link: <strong id="tag-sambandha">Rule matched to current subject</strong></span>
+                </div>
+                <div class="ai-equiv-strip" id="ai-step-4">
+                  <div class="ai-strip-label">Modern AI Equivalent — Pattern Matching &amp; Unification</div>
+                  <code class="ai-strip-code" id="ai-code-4">Unify(RULE_042(?x), "mountain") -> θ = { ?x / "mountain" };</code>
+                </div>
+              </div>
+
+              <!-- STEP 5: NIGAMANA -->
+              <div class="step-card interactive-term-source" id="nyaya-step-5" data-stage="5" data-term="nigamana" tabindex="0">
+                <div class="step-card-header">
+                  <div class="step-title-group">
+                    <span class="step-num-pill">Step 5</span>
+                    <span class="sanskrit-term">Nigamana (Conclusion)</span>
+                  </div>
+                  <span class="step-state-badge">Pending</span>
+                </div>
+                <div class="step-statement" id="nyaya-sutra-5">Therefore, the mountain has fire.</div>
+                <p class="step-explanation" id="nyaya-desc-5">
+                  The hypothesis is now a confirmed conclusion. Because the evidence and universal rule align without error, the answer is proven.
+                </p>
+                <div class="step-tags-row">
+                  <span class="epistemic-tag success-tag">Result: <strong id="tag-pramiti">Proven &amp; Verified</strong></span>
+                </div>
+                <div class="ai-equiv-strip" id="ai-step-5">
+                  <div class="ai-strip-label">Modern AI Equivalent — Inference Engine Output</div>
+                  <code class="ai-strip-code" id="ai-code-5">WorkingMemory.commitFact("has_fire", "mountain"); Action.dispatch(FIRE_ALERT);</code>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Compact Live Execution Log -->
+            <div class="terminal-card">
+              <div class="terminal-header">
+                <span class="terminal-title">Reasoning Trace Log</span>
+                <div class="terminal-actions">
+                  <button type="button" id="copy-trace-btn" class="terminal-btn">Copy</button>
+                  <button type="button" id="clear-trace-btn" class="terminal-btn">Clear</button>
+                </div>
+              </div>
+              <div class="terminal-body" id="inference-log-terminal">
+                <div class="log-line system-line">[Ready] Enter a scenario or pick a sample above, then click Solve.</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RIGHT PANEL (50%): TERMINOLOGY REFERENCE GUIDE -->
+          <aside class="manuscript-panel reference-panel" aria-label="Terminology Reference Guide">
+            <div class="panel-header">
+              <div>
+                <span class="panel-kicker">Terminology Reference Guide</span>
+                <h2 class="panel-heading">Nyaya &amp; AI Glossary Cards</h2>
+              </div>
+              <span class="ref-count-pill" id="ref-count-pill">12 Terms</span>
+            </div>
+
+            <div class="ref-controls">
+              <input
+                type="text"
+                id="ref-search-input"
+                class="custom-text-input"
+                placeholder="Filter terms (e.g., Hetu, Vyapti, AI, Rule)..."
+                aria-label="Filter reference terms"
+              >
+              <div class="ref-filter-pills" id="ref-filter-pills">
+                <button type="button" class="ref-pill active" data-cat="all">All Terms</button>
+                <button type="button" class="ref-pill" data-cat="syllogism">5-Step Proof</button>
+                <button type="button" class="ref-pill" data-cat="epistemology">Ways of Knowing</button>
+                <button type="button" class="ref-pill" data-cat="ontology">AI &amp; Logic Concepts</button>
+              </div>
+            </div>
+
+            <div class="ref-active-banner" id="ref-active-banner" aria-live="polite">
+              Hover or click any step on the left to spotlight its definition here.
+            </div>
+
+            <div class="reference-cards-list" id="reference-cards-list">
+              <!-- Populated cleanly via JS & linked bidirectionally with the Left Panel -->
+            </div>
+          </aside>
+
+        </div>
+
+        <!-- EXTENDED EXPLORATION BELOW THE SPLIT-SCREEN (Preserves Mapping, Fallacies & Knowledge Graph) -->
+        <section class="extended-explorer-section" id="pramanax-explorer">
+          <div class="extended-header">
+            <div>
+              <span class="panel-kicker">Deeper Exploration</span>
+              <h2 class="section-heading">Mapping, Logical Fallacies &amp; Knowledge Graphs</h2>
+              <p class="section-subheading">
+                Inspect how Nyaya rules map to AI systems, test logical fallacies, and explore Vaisheshika ontology as an interactive Knowledge Graph.
+              </p>
+            </div>
+            <div class="explorer-tabs-bar">
+              <button type="button" class="explorer-tab-btn active" data-tab="tab-mapping">⚖️ Ancient-to-AI Mapping</button>
+              <button type="button" class="explorer-tab-btn" data-tab="tab-fallacies">⚠️ Fallacies (Hetvabhasa)</button>
+              <button type="button" class="explorer-tab-btn" data-tab="tab-vaisheshika">🕸️ Knowledge Graph (7 Padarthas)</button>
+            </div>
+          </div>
+
+          <div class="explorer-content-wrapper">
+
+            <!-- TAB A: IKS-TO-AI MAPPING CARDS -->
+            <div class="tab-pane active" id="tab-mapping">
+              <div class="mapping-cards-grid">
+
+                <!-- Card 1: Vyapti -->
+                <div class="manuscript-card mapping-card" id="map-card-1">
+                  <div class="mapping-card-top">
+                    <span class="mapping-badge">Concept 1 • Rules</span>
+                    <h3 class="mapping-card-title">Vyapti ⟷ Expert System Rules</h3>
+                  </div>
+                  <p class="block-text">
+                    <strong>In Nyaya:</strong> <em>Vyapti</em> means an unbreakable rule—whenever X occurs, Y must follow (e.g., wherever there is smoke, there is fire).
+                  </p>
+                  <p class="block-text">
+                    <strong>In Modern AI:</strong> Rule-based expert systems encode this exact pattern as <code>IF Condition THEN Conclusion</code> logic rules.
+                  </p>
+                  <div class="card-interactive-drawer">
+                    <span class="drawer-title">Test Rule Direction (Vyapti Check):</span>
+                    <div class="vyapti-tester">
+                      <button type="button" class="test-pill active" data-test="smoke-fire">Smoke ➔ Fire</button>
+                      <button type="button" class="test-pill" data-test="fire-smoke">Fire ➔ Smoke</button>
+                    </div>
+                    <div class="tester-result" id="vyapti-test-result" aria-live="polite">
+                      <span class="result-badge valid">VALID RULE</span>
+                      <span class="result-text">Smoke reliably indicates fire. Clear lakes (negative cases) never produce smoke.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2: Hetu -->
+                <div class="manuscript-card mapping-card" id="map-card-2">
+                  <div class="mapping-card-top">
+                    <span class="mapping-badge">Concept 2 • Evidence</span>
+                    <h3 class="mapping-card-title">Hetu ⟷ AI Feature Triggers</h3>
+                  </div>
+                  <p class="block-text">
+                    <strong>In Nyaya:</strong> The <em>Hetu</em> is the observed sign or clue (like smoke) that must pass 5 strict checks to be trustworthy.
+                  </p>
+                  <p class="block-text">
+                    <strong>In Modern AI:</strong> Input features and sensor thresholds (e.g., CPU temp &gt; 95°C) act as the evidence triggers that activate decisions.
+                  </p>
+                  <div class="card-interactive-drawer">
+                    <span class="drawer-title">Click a Check to Inspect Trustworthy Evidence:</span>
+                    <div class="criteria-grid" id="hetu-criteria-list">
+                      <button type="button" class="crit-item active" data-crit="pakshadharmata">
+                        <span class="crit-num">1</span>
+                        <span class="crit-name">Pakshadharmata</span>
+                        <span class="crit-ai">Present in current case</span>
+                      </button>
+                      <button type="button" class="crit-item" data-crit="sapakshasattva">
+                        <span class="crit-num">2</span>
+                        <span class="crit-name">Sapakshasattva</span>
+                        <span class="crit-ai">Seen in positive examples</span>
+                      </button>
+                      <button type="button" class="crit-item" data-crit="vipaksha">
+                        <span class="crit-num">3</span>
+                        <span class="crit-name">Vipaksha-Abhava</span>
+                        <span class="crit-ai">Absent in negative cases</span>
+                      </button>
+                      <button type="button" class="crit-item" data-crit="abadhitatva">
+                        <span class="crit-num">4</span>
+                        <span class="crit-name">Abadhitatva</span>
+                        <span class="crit-ai">Not disproven by sensors</span>
+                      </button>
+                      <button type="button" class="crit-item" data-crit="asatpratipaksha">
+                        <span class="crit-num">5</span>
+                        <span class="crit-name">Asatpratipakshatva</span>
+                        <span class="crit-ai">No equal counter-claim</span>
+                      </button>
+                    </div>
+                    <div class="tester-result" id="hetu-crit-detail" style="margin-top:0.6rem;" aria-live="polite">
+                      <span class="result-badge valid">Pakshadharmata</span>
+                      <span class="result-text">The clue must genuinely exist in the specific case being tested, preventing ungrounded guesses.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 3: Nigamana -->
+                <div class="manuscript-card mapping-card" id="map-card-3">
+                  <div class="mapping-card-top">
+                    <span class="mapping-badge">Concept 3 • Output</span>
+                    <h3 class="mapping-card-title">Nigamana ⟷ Explainable AI Output</h3>
+                  </div>
+                  <p class="block-text">
+                    <strong>In Nyaya:</strong> <em>Nigamana</em> is the final confirmed conclusion—valid only after every step and real-world example has been verified.
+                  </p>
+                  <p class="block-text">
+                    <strong>In Modern AI:</strong> Mirrors Explainable AI (XAI), where an AI outputs a final decision along with a transparent, auditable reasoning trail.
+                  </p>
+                  <div class="card-interactive-drawer">
+                    <div class="drawer-header-row">
+                      <span class="drawer-title">Nyaya (5 Steps) vs. Aristotle (3 Steps)</span>
+                      <button type="button" id="toggle-syllogism-btn" class="viz-btn">Compare Models</button>
+                    </div>
+                    <p class="block-text" style="margin-bottom:0.4rem;">
+                      Unlike Aristotle's purely abstract 3-step logic, Nyaya requires a real-world verified example (<em>Udaharana</em>) before concluding.
+                    </p>
+                    <div id="syllogism-model-box" class="comparison-box" style="display:none;">
+                      <div><strong>Aristotle (3 steps):</strong> Major Premise → Minor Premise → Conclusion</div>
+                      <div><strong>Nyaya (5 steps):</strong> Claim → Clue → Rule + Example → Application → Conclusion</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- TAB B: HETVABHASA (FALLACIES) -->
+            <div class="tab-pane" id="tab-fallacies">
+              <div class="fallacies-grid">
+                <div class="manuscript-card fallacy-card">
+                  <span class="fallacy-tag">Fallacy 1</span>
+                  <h4 class="fallacy-name">Savyabhichara (Inconsistent Clue)</h4>
+                  <p class="fallacy-desc">A clue that appears in both positive and negative cases, so it cannot prove the claim.</p>
+                  <div class="ai-bug-box"><strong>AI Equivalent:</strong> Spurious correlations &amp; model hallucinations.</div>
+                </div>
+                <div class="manuscript-card fallacy-card">
+                  <span class="fallacy-tag">Fallacy 2</span>
+                  <h4 class="fallacy-name">Viruddha (Contradictory Clue)</h4>
+                  <p class="fallacy-desc">A reason that actually proves the exact opposite of what you claimed.</p>
+                  <div class="ai-bug-box"><strong>AI Equivalent:</strong> Data poisoning &amp; adversarial sticker attacks.</div>
+                </div>
+                <div class="manuscript-card fallacy-card">
+                  <span class="fallacy-tag">Fallacy 3</span>
+                  <h4 class="fallacy-name">Satpratipaksha (Tied Evidence)</h4>
+                  <p class="fallacy-desc">Two equally strong clues push toward opposite conclusions, creating a deadlock.</p>
+                  <div class="ai-bug-box"><strong>AI Equivalent:</strong> Conflicting guardrails causing agent paralysis.</div>
+                </div>
+                <div class="manuscript-card fallacy-card">
+                  <span class="fallacy-tag">Fallacy 4</span>
+                  <h4 class="fallacy-name">Asiddha (Unproven Premise)</h4>
+                  <p class="fallacy-desc">A reason built on an assumption or object that does not actually exist.</p>
+                  <div class="ai-bug-box"><strong>AI Equivalent:</strong> Corrupted input data or Out-of-Distribution (OOD) inputs.</div>
+                </div>
+                <div class="manuscript-card fallacy-card">
+                  <span class="fallacy-tag">Fallacy 5</span>
+                  <h4 class="fallacy-name">Badhita (Overruled by Direct Fact)</h4>
+                  <p class="fallacy-desc">An inferred conclusion that directly contradicts what you can plainly observe.</p>
+                  <div class="ai-bug-box"><strong>AI Equivalent:</strong> ML prediction overruled by ground-truth safety radar.</div>
+                </div>
+              </div>
+
+              <div class="manuscript-card fallacy-detective-card">
+                <h4 class="detective-title">Fallacy Detective: Diagnose an AI Failure</h4>
+                <p class="detective-desc">Select an AI mistake below to see which Nyaya logical fallacy explains it:</p>
+                <div class="detective-options">
+                  <button type="button" class="detective-btn active" data-scenario="hallucination">
+                    Case A: Self-driving car thinks a puddle reflection is a green light, even though radar detects an obstacle ahead.
+                  </button>
+                  <button type="button" class="detective-btn" data-scenario="bias">
+                    Case B: Healthcare AI predicts a patient is healthy solely because their medical bill was low (ignoring uninsured patients).
+                  </button>
+                  <button type="button" class="detective-btn" data-scenario="poison">
+                    Case C: A tampered sticker on a STOP sign tricks a classifier into reading it as a 60 MPH sign.
+                  </button>
+                  <button type="button" class="detective-btn" data-scenario="asiddha">
+                    Case D: Fraud engine flags a login from "Atlantis Island" due to corrupted GPS data.
+                  </button>
+                  <button type="button" class="detective-btn" data-scenario="satpratipaksha">
+                    Case E: Two safety rules fire contradictory instructions at once ("Share summary" vs. "Block summary").
+                  </button>
+                </div>
+                <div class="detective-diagnosis-box" id="detective-diagnosis" aria-live="polite">
+                  <div class="diagnosis-badge">Diagnosis: Badhita (Overruled by Direct Observation)</div>
+                  <p class="diagnosis-text">
+                    The AI's guess is directly disproven by immediate sensor reality (Pratyaksha). In Nyaya logic, direct perception always overrides indirect inference.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB C: VAISHESHIKA KNOWLEDGE GRAPH -->
+            <div class="tab-pane" id="tab-vaisheshika">
+              <div class="manuscript-card graph-visualizer-card">
+                <div class="graph-viz-header">
+                  <div>
+                    <h4 class="viz-title">Interactive Vaisheshika Knowledge Graph (7 Padarthas)</h4>
+                    <span class="viz-subtitle">Click or drag any node to see how ancient categories map to modern AI Knowledge Graphs</span>
+                  </div>
+                  <div class="viz-controls">
+                    <button type="button" id="reset-graph-btn" class="viz-btn">Reset Layout</button>
+                    <button type="button" id="toggle-graph-theme-btn" class="viz-btn">Mode: Sanskrit Terms</button>
+                  </div>
+                </div>
+
+                <div class="canvas-container">
+                  <canvas id="knowledge-graph-canvas" width="900" height="420"></canvas>
+                  <div class="canvas-node-tooltip" id="canvas-node-tooltip"></div>
+                </div>
+
+                <div class="graph-triple-bar">
+                  <div class="triple-title">Selected Knowledge Graph Relationship:</div>
+                  <div class="triple-display" id="active-triple-display">
+                    <span class="triple-subject" id="triple-sub">(Mountain: Dravya / Entity)</span>
+                    <span class="triple-arrow">― [inheres_in: Samavaya] ➔</span>
+                    <span class="triple-object" id="triple-obj">(Fire: Guna / Property)</span>
+                  </div>
+                  <div class="sparql-preview">
+                    <code id="triple-code-preview">SPARQL: :Mountain :hasProperty :Fire .</code>
+                  </div>
+                </div>
+              </div>
+
+              <div class="padarthas-grid">
+                <div class="manuscript-card padartha-card" data-padartha="dravya" tabindex="0">
+                  <h5 class="padartha-title">1. Dravya (Substance)</h5>
+                  <p class="padartha-desc">The core physical or conceptual object—like a mountain or a server.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Entity / Node</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="guna" tabindex="0">
+                  <h5 class="padartha-title">2. Guna (Quality)</h5>
+                  <p class="padartha-desc">Attributes attached to an object—such as color, heat, or temperature.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Node Property</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="karma" tabindex="0">
+                  <h5 class="padartha-title">3. Karma (Action)</h5>
+                  <p class="padartha-desc">Movement, activity, or state changes happening to an object.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Action / Event Edge</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="samanya" tabindex="0">
+                  <h5 class="padartha-title">4. Samanya (Generality)</h5>
+                  <p class="padartha-desc">The shared category or group an object belongs to.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Class / Type Schema</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="vishesha" tabindex="0">
+                  <h5 class="padartha-title">5. Vishesha (Particularity)</h5>
+                  <p class="padartha-desc">The unique feature that sets one individual object apart from all others.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Unique ID / Primary Key</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="samavaya" tabindex="0">
+                  <h5 class="padartha-title">6. Samavaya (Inherence)</h5>
+                  <p class="padartha-desc">An inseparable link uniting a whole with its parts or an object with its traits.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong>Structural Edge</strong></div>
+                </div>
+                <div class="manuscript-card padartha-card" data-padartha="abhava" tabindex="0">
+                  <h5 class="padartha-title">7. Abhava (Absence)</h5>
+                  <p class="padartha-desc">Knowing when something is missing or does not exist in a location.</p>
+                  <div class="padartha-kg-badge">AI Graph Role: <strong><code>NOT EXISTS</code> Check</strong></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 2: QUIZ GAME MODE                                                  -->
+    <!-- ======================================================================= -->
+    <div id="view-quiz" class="app-view" role="tabpanel" aria-labelledby="switch-quiz-btn" hidden>
+      <div class="section-container quiz-view-container">
+
+        <!-- Sub-mode selector (Primary 1-Question Quiz vs 5-Step Card Puzzle) -->
+        <div class="quiz-submode-bar">
+          <button type="button" class="submode-btn active" id="submode-mcq-btn" data-submode="mcq">
+            📝 Single-Question Nyaya &amp; AI Quiz
+          </button>
+          <button type="button" class="submode-btn" id="submode-puzzle-btn" data-submode="puzzle">
+            🧩 5-Step Syllogism Card Puzzle
+          </button>
+        </div>
+
+        <!-- QUIZ MODE A: ONE QUESTION AT A TIME (UNLIMITED ATTEMPTS + AUTO-PROGRESS) -->
+        <section class="manuscript-card quiz-stage-card" id="quiz-mcq-panel">
+          <div class="quiz-top-bar">
+            <div class="quiz-progress-meta">
+              <span class="panel-kicker" id="quiz-category-badge">Nyaya Epistemology</span>
+              <span class="quiz-counter" id="quiz-question-counter">Question 1 of 8</span>
+            </div>
+            <div class="quiz-stats-right">
+              <span class="quiz-stat-pill">Attempts on this Q: <strong id="quiz-current-attempts">0</strong></span>
+              <span class="quiz-stat-pill">Solved: <strong id="quiz-solved-count">0 / 8</strong></span>
+              <button type="button" id="quiz-restart-btn" class="ghost-btn">↺ Restart Quiz</button>
+            </div>
+          </div>
+
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-fill" id="quiz-progress-fill" style="width: 12.5%;"></div>
+          </div>
+
+          <!-- Active Question Workspace -->
+          <div id="quiz-active-area">
+            <h2 class="quiz-question-text" id="quiz-question-text">
+              Loading question...
+            </h2>
+            <p class="quiz-instruction-note">
+              Take your time—you have <strong>unlimited attempts</strong>. Select the correct answer to automatically advance to the next question.
+            </p>
+
+            <div class="quiz-options-grid" id="quiz-options-grid">
+              <!-- Option buttons injected via JS -->
+            </div>
+
+            <!-- Feedback Banner (Encouraging hints on wrong, auto-advance confirmation on correct) -->
+            <div class="quiz-feedback-banner" id="quiz-feedback-banner" aria-live="polite" style="display: none;">
+              <div class="quiz-feedback-icon" id="quiz-feedback-icon"></div>
+              <div class="quiz-feedback-copy">
+                <strong class="quiz-feedback-title" id="quiz-feedback-title"></strong>
+                <p class="quiz-feedback-msg" id="quiz-feedback-msg"></p>
+              </div>
+              <button type="button" id="quiz-manual-next-btn" class="secondary-btn" style="display: none;">Next Now →</button>
+            </div>
+          </div>
+
+          <!-- Quiz Completion Screen -->
+          <div id="quiz-complete-area" class="quiz-complete-card" style="display: none;">
+            <div class="completion-seal">✦</div>
+            <h2 class="completion-title">Quiz Complete — Pramiti Achieved!</h2>
+            <p class="completion-subtitle">
+              You successfully answered all <strong id="quiz-final-total">8</strong> questions connecting Nyaya logic and modern AI.
+            </p>
+            <div class="completion-metrics">
+              <div class="metric-box">
+                <span class="metric-label">Questions Solved</span>
+                <span class="metric-val" id="quiz-final-solved">8 / 8</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">First-Try Answers</span>
+                <span class="metric-val" id="quiz-final-first-try">0 / 8</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">Total Tries Used</span>
+                <span class="metric-val" id="quiz-final-attempts">0</span>
+              </div>
+            </div>
+            <div class="completion-actions">
+              <button type="button" id="quiz-play-again-btn" class="primary-btn">↺ Play Quiz Again</button>
+              <button type="button" id="quiz-back-sim-btn" class="secondary-btn">⚖️ Back to Simulation Mode</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- QUIZ MODE B: PRESERVED 5-CARD SORTING PUZZLE (LOGIC LAB) -->
+        <section class="manuscript-card lab-card" id="quiz-puzzle-panel" style="display: none;">
+          <div class="lab-question-banner">
+            <span class="panel-kicker">Hands-On Sequence Challenge</span>
+            <h3 class="lab-challenge-title" id="lab-scenario-title">
+              Question: "Is there fire on the mountain?"
+            </h3>
+            <p class="lab-challenge-instruction">
+              Arrange these 5 statements from Step 1 to Step 5 using the <strong>▲ / ▼</strong> buttons or drag-and-drop, then click <strong>Submit Answer</strong>.
+            </p>
+            <div class="lab-scenario-selector">
+              <span class="scenario-label">Puzzle Topic:</span>
+              <button type="button" class="scenario-btn active" data-scenario="mountain">Mountain Fire</button>
+              <button type="button" class="scenario-btn" data-scenario="server">Server Overheat</button>
+              <button type="button" class="scenario-btn" data-scenario="autonomous">Autonomous Brake</button>
+            </div>
+          </div>
+
+          <div class="lab-status-bar">
+            <div class="score-display">
+              <span class="score-label">Score:</span>
+              <span class="score-num" id="lab-score">0 / 5</span>
+              <span class="score-percent" id="lab-percent">(Not Submitted)</span>
+              <span class="attempts-pill">Attempts: <strong id="lab-attempts">0</strong></span>
+            </div>
+            <div class="lab-controls">
+              <button type="button" id="lab-hint-btn" class="ghost-btn">💡 Hint</button>
+              <button type="button" id="reveal-solution-btn" class="ghost-btn">👁 Reveal Order</button>
+              <button type="button" id="shuffle-cards-btn" class="secondary-btn">🔀 Shuffle</button>
+              <button type="button" id="submit-order-btn" class="primary-btn">✓ Submit Answer</button>
+            </div>
+          </div>
+
+          <div class="lab-hint-box" id="lab-hint-box" style="display: none;"></div>
+          <div class="cards-sorting-area" id="sorting-cards-container"></div>
+
+          <div class="lab-feedback-panel" id="lab-feedback-panel" style="display: none;">
+            <div class="feedback-header" id="feedback-header">
+              <div class="feedback-badge" id="feedback-badge">
+                <span class="feedback-icon" id="feedback-icon">✓</span>
+                <span class="feedback-title" id="feedback-title">Result</span>
+              </div>
+              <div class="score-stars" id="score-stars">★★★★★</div>
+            </div>
+            <p class="feedback-summary" id="feedback-summary"></p>
+            <div class="sequence-breakdown-table">
+              <h4 class="breakdown-title">Correct 5-Step Sequence:</h4>
+              <div class="breakdown-rows" id="breakdown-rows-container"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- LEXICON MODAL -->
+  <div class="modal-overlay" id="glossary-modal">
+    <div class="manuscript-card glossary-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">HetuLogic Plain-English Lexicon</h3>
+        <button type="button" class="modal-close-btn" id="close-glossary-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-search-row">
+        <input
+          type="text"
+          id="glossary-search-input"
+          class="custom-text-input"
+          placeholder="Search terms (e.g., Vyapti, Hetu, Pratyaksha, AI)..."
+        >
+      </div>
+      <div class="glossary-items-list" id="glossary-list"></div>
+    </div>
+  </div>
+
+  <!-- SYLLOGISM REPORT EXPORT MODAL -->
+  <div class="modal-overlay" id="export-modal">
+    <div class="manuscript-card report-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">HetuLogic Reasoning Report</h3>
+        <button type="button" class="modal-close-btn" id="close-export-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="report-content-preview">
+        <pre id="report-text-pre"></pre>
+      </div>
+      <div class="modal-footer-actions">
+        <button type="button" id="copy-report-markdown-btn" class="secondary-btn">📋 Copy Markdown</button>
+        <button type="button" id="download-report-btn" class="primary-btn">⬇ Download .md</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <span class="footer-logo">HetuLogic — Ancient Indian Logic &amp; Modern AI</span>
+      <p class="footer-credits">
+        Inspired by the Nyaya and Vaisheshika philosophical traditions. Built with vanilla HTML, CSS, and JavaScript.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Mount -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>
